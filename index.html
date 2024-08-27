@@ -1,14 +1,21 @@
-<html>
-    <head>
-        
-    </head>
+<!DOCTYPE html>
+<html lang = "en">
+    <head></head>
 
-    <canvas id="canvas" width="300" height="150"></canvas>
-    
-    <script difer src="./src/main.js"></script>
+    <style>
+        canvas{ 
+            position: relative;
+            left: 200px;
+        }
+    </style>
+
+    <script difer src="./src/host.js"></script>
+    <script difer src="./src/client.js"></script>
     
     <button id="hostStart" onclick="hostStart()">host start</button>
-    <button id="clientStart">clinet start</button>
+    <input id="hostIP" type="text">host IP</input>
+    <button id="clientConnectButton" onclick="clientStart()">client connect</button>
+    
     
     
 
