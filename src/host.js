@@ -39,13 +39,10 @@ document.addEventListener("keydown", function(event){
 			letters[letterIndex].innerHTML = event.code[3];
 			letterIndex++;
 		}
-	}
-	if (event.code[3] == "k"){
+	} else if (event.code[3] == "k"){
 		if (letterIndex > 0) letterIndex--;
 		letters[letterIndex].innerHTML = "";
 	}
-	//event.code[3];
-	//letterIndex += 1;
 }); 
 
 
