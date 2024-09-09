@@ -2,22 +2,22 @@
     from {background-color: red;}
     to {background-color: yellow;}
 }
-div.app {
+.app {
     margin:					10%;
 }
-div.board {
+.board {
     display:				grid;
     grid-template-rows:		repeat(6, 1fr);
     grid-gap:				5px;
     padding					10px;
 }
-div.row {
+.row {
     display:				grid;
     grid-template-columns:	repeat(5, 1fr);
     gap:					5px;
     margin:					auto;
 }
-div.letterBox {
+.letterBox {
     width:					70px;
     height:					70px;	
     background-color:		white;
@@ -28,12 +28,14 @@ div.letterBox {
     animation-duration:		4s;
     text-transform:			uppercase;
     font-size:				35px;
-    text-align:             center;
-    content:                "T";
-}
-div.letterBox::before {
+	display:				inline-flex;
+    justify-content:		center;
+	align-items:            center;
+	vertical-align:			middle;
+	box-sizing:				border-box;
 
 }
-.test {
-    content: "test";
+.letterBox::before {
+	content:				"";
+
 }
