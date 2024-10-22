@@ -5,11 +5,19 @@
 .app {
     margin:					10%;
 }
-.board {
+.board1 {
+    float:                  left;
     display:				grid;
     grid-template-rows:		repeat(6, 1fr);
     grid-gap:				5px;
     padding:				10px;
+}
+.board2 {
+    float:                  right;
+    display:                grid;
+    grid-template-rows:		repeat(6, 1fr);
+    grid-gap:				5px;
+    padding:				20px;
 }
 .row {
     display:				grid;

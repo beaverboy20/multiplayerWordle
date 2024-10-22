@@ -1,22 +1,35 @@
 <!DOCTYPE html>
 <html lang = "en">
     <head></head>
+
     <h1>website test (2)</h1>
+
     <style>
-        canvas{ 
-            position: relative;
-            left: 200px;
+        .content{ 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin: 0 10px;
         }
     </style>
 
-    <script difer src="./src/host.js"></script>
-    <script difer src="./src/client.js"></script>
+    <div class = "content">
+
+        <button id="hostStart" onclick="hostStart()">host start</button>
+        <input id="hostName" type="text" placeholder="host name"></input>
+        <button id="clientConnectButton" onclick="clientStart()">client connect</button>
     
-    <button id="hostStart" onclick="hostStart()">host start</button>
-    <input id="hostIP" type="text">host IP</input>
-    <button id="clientConnectButton" onclick="clientStart()">client connect</button>
-    
-    
+    </html>
+        
+    <script type="text/javascript">
+        function hostStart(){
+            var hostName = document.getElementById("hostName").value;
+            location.href = document.URL.slice(0, -10)+"host.html"+"?name="+hostName
+        };
+        function clientStart(hostName){
+            
+        }
+    </script>
     
 
 
