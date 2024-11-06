@@ -22,13 +22,25 @@
     </html>
         
     <script type="text/javascript">
+        function noName(){
+            const newDiv = document.createElement("div");
+            const newContent = document.createTextNode("You must enter a host name");
+            newDiv.appendChild(newContent);
+            const currentDiv = document.getElementById("div1");
+            document.body.insertBefore(newDiv, currentDiv);
+        };
         function hostStart(){
             var hostName = document.getElementById("hostName").value;
-            location.href = document.URL.slice(0, -10)+"host.html"+"?name="+hostName
+            if (hostName.length > 0){
+                location.href = document.URL+"host.html"+"?name="+hostName
+            } else { noName(); }
         };
         function clientStart(hostName){
-            
-        }
+            var hostName = document.getElementById("hostName").value;
+            if (hostName.length > 0){
+                location.href = document.URL+"client.html"+"?name="+hostName
+            } else { noName(); }
+        };
     </script>
     
 

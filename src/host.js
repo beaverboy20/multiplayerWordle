@@ -2,18 +2,16 @@ var letterIndex = 0;
 var letters = [];
 var currentRowElement;
 var currentRow = "row1";
-var words = []
-fetch("words.txt")
-    .then((res) => res.text())
-    .then((text) => {
-        words += text;
-    })
-    .catch((e) =>console.error(e));
 var word = "";
 
-function generateWord(){
+import { words } from './words.js'
 
+function generateWord(){
+	word = words[Math.floor(Math.random()*489)]
+	document.getElementById("word").innerText = word.toUpperCase();
+	return(word);
 }
+generateWord();
 
 function newRow(){
     currentRowElement = document.getElementById(currentRow);
@@ -33,5 +31,7 @@ document.addEventListener("keydown", function(event){
 	} else if (event.code[3] == "k"){
 		if (letterIndex > 0) letterIndex--;
 		letters[letterIndex].innerHTML = "";
+	} else if (event.code[3] == "e"){
+		
 	}
 }); 
