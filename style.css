@@ -13,6 +13,7 @@
     padding:				10px;
 }
 .board2 {
+    
     float:                  right;
     display:                grid;
     grid-template-rows:		repeat(6, 1fr);
@@ -41,7 +42,8 @@
 	align-items:            center;
 	vertical-align:			middle;
 	box-sizing:				border-box;
-
+    transition-property:    background-color;
+    transition-duration:    3s;
 }
 .letterBox::before {
 	content:				"";
