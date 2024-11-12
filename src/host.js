@@ -14,7 +14,16 @@ function generateWord(){
 }
 generateWord();
 
-function newRow(){
+function newRow(first = false){
+	if (!first){
+		for (var i = 0; i < 5; i++){
+			if (letters[i].innerHTML == word[i]){
+				letters[i].classList.add('correctC');
+			} else if (word.includes(letters[i].innerHTML)){
+				letters[i].classList.add("incorrectC");
+			}
+		}
+	}
 	letters = [];
 	letterIndex = 0;
 	currentRow = (currentRow.slice(0, -1))+(parseInt(currentRow[3])+1).toString()
@@ -23,7 +32,7 @@ function newRow(){
 		letters.push(element)
 	}
 }
-newRow();
+newRow(true);
 
 function typedWord(){
 	var typedWord = "";
@@ -46,7 +55,7 @@ document.addEventListener("keydown", function(event){
 		if(letterIndex != 5) {
 			messageField.innerHTML = "Type a 5 letter word";
 		} else if(words.includes(typedWord()) == false) {
-			console.log(typedWord());
+			messageField.innerHTML = "Not a word";
 		} else {
 			messageField.innerHTML = "";
 			newRow();
