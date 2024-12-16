@@ -9,54 +9,69 @@ const name = urlParameters.get("name");
 const role = urlParameters.get("role");
 
 import {Peer} from "https://esm.sh/peerjs@1.5.4?bundle-deps"
+var peer = new Peer(name, { debug: 3, });
 
+function peerSR(sendOrRecieve, message = "nothing"){
+	if (role == "host"){
+		if (sendOrRecieve == "init") { 
+			word = words[Math.floor(Math.random()*489)]
+			document.getElementById("word").innerText = word.toUpperCase();
+			messageField.innerHTML = "waiting for a connection"; 
+		}
+		peer.on("error", error => {
+			if (error.type === "unavailable-id") { messageField.innerHTML = "host name taken. choose a differant one"; } 
+			else { console.log("error aaaaaaa"); }
+		});
+		peer.on('connection', conn => {
+			if (sendOrRecieve == "init") { 
+				peerSR("send", word);
+				console.log(message);
+				messageField.innerHTML = ""; 
+			} else {
+			if (sendOrRecieve == "send") {conn.on("open", () => {
+				conn.send(message);
+			})};
+			if (sendOrRecieve == "recieve") {conn.on("data", (data) => {
+				console.log(data);
+				return data;
+			})};
+		}});
+	};
+	if (role == "client"){ 
+		peer.on("error", error => {
+			if (error.type === "peer-unavailable") { messageField.innerHTML = "no host found. you probabaly typed it wrong. refresh to search again."; } 
+			else if (error.type === "unavailable-id") { console.log("unavailable-id"); } 
+			else { console.log("error aaaaaaa"); }
+		});
+		peer.on("open", () => {
+			const conn = peer.connect("h"+name.slice(1));
+			if (sendOrRecieve == "send") {conn.on("open", () => { 
+				conn.send(message);
+			})};
+			if (sendOrRecieve == "recieve" || sendOrRecieve == "init") { conn.on("data", (data) => {
+				if (sendOrRecieve = "init"){ document.getElementById("word").innerText = data.toUpperCase(); }
+				console.log(data);
+				return data;
+			})};
+		});
+	};
+};
+peerSR("init", word);
 
 if (role == "host"){
-	var peer = new Peer("hasd", {
-		debug: 3, 
-		//host: "localhost",
-		//port: 8080
-
-	});
-	
-	peer.on("open", () => {
-		const conn = peer.connect("casd");
-		conn.on("open", () => {
-			conn.send("hi oggabooga");
-			console.log('ssssss');
-		})
-		
-	});
-	
+	peerSR("send", "hello from host");
+} 
+if (role == "client"){
+	peerSR("recieve");
+}
+if (role == "host"){
+	peerSR("send", "hello from host 222222");
+} 
+if (role == "client"){
+	peerSR("recieve");
 }
 
-else {
-	var peer = new Peer("casd", {
-		debug: 3,
-		//host: "localhost",
-		//port: 8080
-	});
-	peer.on('connection', function(conn) {
-		conn.on("data", function(data){
-			console.log(data);
-		})
-	});
-
-}
-function sendMore(){
-	
-	conn.send("hi oggabooga");
-}
-
-
-import { words } from './words.js'
-
-function generateWord(){
-	word = words[Math.floor(Math.random()*489)]
-	document.getElementById("word").innerText = word.toUpperCase();
-	return(word);
-}
-generateWord();
+import { words } from './words.js';
 
 function newRow(first = false){
 	if (!first){
@@ -67,6 +82,9 @@ function newRow(first = false){
 				letters[i].classList.add("incorrectC");
 			}
 		}
+		console.log('s');
+		peerSR("send", letters);
+		peerSR("recieve");
 	}
 	letters = [];
 	letterIndex = 0;
@@ -88,7 +106,6 @@ function typedWord(){
 
 document.addEventListener("keydown", function(event){
 	if (/[A-Z]/.test(event.code[3])){ //letter
-		sendMore();
 		if (letterIndex >= 0 && letterIndex < 5) {
 			letters[letterIndex].innerHTML = event.code[3];
 			letterIndex++;
