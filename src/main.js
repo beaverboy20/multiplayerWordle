@@ -31,13 +31,11 @@ function log(message){
 
 
 function newRow(grid, first = false){
-	console.log(word);
 	if (grid == "left"){
 		if (!first){
 			var correctN = 0;
 			for (var i = 0; i < 5; i++){
 				if (letters[i].innerHTML == word[i]){
-					console.log('s');
 					letters[i].classList.add("correctC");
 					correctN++;
 				} else if (word.includes(letters[i].innerHTML)){
@@ -101,7 +99,7 @@ if (role == "host"){
 	newRow("right", true);
 
 	word = words[Math.floor(Math.random()*489)]
-	document.getElementById("word").innerText = word.toUpperCase();
+	document.getElementById("word").innerText = "multiplayer wordle";//word.toUpperCase();
 	log("waiting for a connection"); 
 	peer.on("error", error => {
 		if (error.type === "unavailable-id") { log("host name taken. choose a differant one"); } 
@@ -128,9 +126,9 @@ if (role == "host"){
 					}
 				} else if (data == "e"){
 					if(otherLetterIndex != 5) {
-						log("Type a 5 letter word");
+						
 					} else if(words.includes(typedWord("right")) == false) {
-						log("Not a word");
+						
 					} else {
 						newRow("right");
 					}
@@ -183,7 +181,7 @@ if (role == "client"){
 		});
 		conn.on("data", (data) => {
 			if (data.length > 5 && data[0] == "W"){
-				document.getElementById("word").innerText = data.slice(1).toUpperCase();
+				document.getElementById("word").innerText = "multiplayer wordle";//data.slice(1).toUpperCase();
 				word = data.slice(1).toUpperCase();
 			}
 			if (data.length == 1){
@@ -199,9 +197,7 @@ if (role == "client"){
 					}
 				} else if (data == "e"){
 					if(otherLetterIndex != 5) {
-						log("Type a 5 letter word");
 					} else if(words.includes(typedWord("right")) == false) {
-						log("Not a word");
 					} else {
 						newRow("right");
 					}
