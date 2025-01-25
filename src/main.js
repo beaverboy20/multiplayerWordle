@@ -11,6 +11,7 @@ var messageField = document.getElementById("message");
 const urlParameters = new URLSearchParams(window.location.search)
 const name = urlParameters.get("name");
 const role = urlParameters.get("role");
+var end = false;
 
 import {Peer} from "https://esm.sh/peerjs@1.5.4?bundle-deps"
 import { words } from './words.js';
@@ -28,20 +29,25 @@ function log(message){
 	}
 }
 
-var box = document.getElementById("letter1");
-box.classList.add("fade");
-console.log(box);
-
 
 function newRow(grid, first = false){
+	console.log(word);
 	if (grid == "left"){
 		if (!first){
+			var correctN = 0;
 			for (var i = 0; i < 5; i++){
 				if (letters[i].innerHTML == word[i]){
+					console.log('s');
 					letters[i].classList.add("correctC");
+					correctN++;
 				} else if (word.includes(letters[i].innerHTML)){
 					letters[i].classList.add("incorrectC");
 				}
+			}
+			if (correctN == 5){
+				document.body.style.background = "green";
+				end = true;
+				log("you win");
 			}
 		}
 		letters = [];
@@ -53,12 +59,19 @@ function newRow(grid, first = false){
 		}
 	} else {
 		if (!first){
+			var correctN = 0;
 			for (var i = 0; i < 5; i++){
 				if (otherLetters[i].innerHTML == word[i]){
 					otherLetters[i].classList.add("correctC");
+					correctN++;
 				} else if (word.includes(otherLetters[i].innerHTML)){
 					otherLetters[i].classList.add("incorrectC");
 				}
+			}
+			if (correctN == 5){
+				document.body.style.background = "red";
+				end = true;
+				log("you loose");
 			}
 		}
 		otherLetters = [];
@@ -102,7 +115,6 @@ if (role == "host"){
 			conn.send("W"+word);
 		});
 		conn.on("data", (data) => {
-			console.log(data);
 			if (data.length == 1){
 				if (/[A-Z]/.test(data)){ //letter
 					if (otherLetterIndex >= 0 && otherLetterIndex < 5) {
@@ -123,7 +135,11 @@ if (role == "host"){
 						newRow("right");
 					}
 				}
-			}		document.addEventListener("keydown", function(event){
+			}		
+
+		});
+		document.addEventListener("keydown", function(event){
+			if (!end){
 				if (/[A-Z]/.test(event.code[3])){ //letter
 					if (letterIndex >= 0 && letterIndex < 5) {
 						letters[letterIndex].innerHTML = event.code[3];
@@ -142,28 +158,7 @@ if (role == "host"){
 					}
 				}
 				conn.send(event.code[3]);
-			}); 
-		});
-		
-		document.addEventListener("keydown", function(event){
-			if (/[A-Z]/.test(event.code[3])){ //letter
-				if (letterIndex >= 0 && letterIndex < 5) {
-					letters[letterIndex].innerHTML = event.code[3];
-					letterIndex++;
-				}
-			} else if (event.code[3] == "k"){ //backspace
-				if (letterIndex > 0) letterIndex--;
-				letters[letterIndex].innerHTML = "";
-			} else if (event.code[3] == "e"){ //enter
-				if(letterIndex != 5) {
-					log("Type a 5 letter word");
-				} else if(words.includes(typedWord("left")) == false) {
-					log("Not a word");
-				} else {
-					newRow("left");
-				}
-			}
-			conn.send(event.code[3]);
+			};
 		}); 
 	});
 };
@@ -187,11 +182,10 @@ if (role == "client"){
 			log("type your guess");
 		});
 		conn.on("data", (data) => {
-			console.log(word);
 			if (data.length > 5 && data[0] == "W"){
 				document.getElementById("word").innerText = data.slice(1).toUpperCase();
+				word = data.slice(1).toUpperCase();
 			}
-			console.log(data);
 			if (data.length == 1){
 				if (/[A-Z]/.test(data)){ //letter
 					if (otherLetterIndex >= 0 && otherLetterIndex < 5) {
@@ -214,26 +208,27 @@ if (role == "client"){
 				}
 			}
 		});
-
 		document.addEventListener("keydown", function(event){
-			if (/[A-Z]/.test(event.code[3])){ //letter
-				if (letterIndex >= 0 && letterIndex < 5) {
-					letters[letterIndex].innerHTML = event.code[3];
-					letterIndex++;
+			if (!end){
+				if (/[A-Z]/.test(event.code[3])){ //letter
+					if (letterIndex >= 0 && letterIndex < 5) {
+						letters[letterIndex].innerHTML = event.code[3];
+						letterIndex++;
+					}
+				} else if (event.code[3] == "k"){ //backspace
+					if (letterIndex > 0) letterIndex--;
+					letters[letterIndex].innerHTML = "";
+				} else if (event.code[3] == "e"){ //enter
+					if(letterIndex != 5) {
+						log("Type a 5 letter word");
+					} else if(words.includes(typedWord("left")) == false) {
+						log("Not a word");
+					} else {
+						newRow("left");
+					}
 				}
-			} else if (event.code[3] == "k"){ //backspace
-				if (letterIndex > 0) letterIndex--;
-				letters[letterIndex].innerHTML = "";
-			} else if (event.code[3] == "e"){ //enter
-				if(letterIndex != 5) {
-					log("Type a 5 letter word");
-				} else if(words.includes(typedWord("left")) == false) {
-					log("Not a word");
-				} else {
-					newRow("left");
-				}
-			}
-			conn.send(event.code[3]);
+				conn.send(event.code[3]);
+			};
 		}); 
 	});
 };
