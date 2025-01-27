@@ -99,6 +99,7 @@ if (role == "host"){
 	newRow("right", true);
 
 	word = words[Math.floor(Math.random()*489)]
+	console.log("NOTTHEWORD"+word);
 	document.getElementById("word").innerText = "multiplayer wordle";//word.toUpperCase();
 	log("waiting for a connection"); 
 	peer.on("error", error => {
